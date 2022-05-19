@@ -11,13 +11,21 @@ for(let td of allTds) {
     let row = parseInt(td.id[0])
     let column = parseInt(td.id[1])
     table[row][column] = 1
+    updateUI(row, column, true)
     console.log(table)
     let result = checkTable()
     if (result === 1 || result === 2) {
       resetTable()
     }
+
+    makeComputerMove()
+    result = checkTable()
+    if (result === 1 || result === 2) {
+      resetTable()
+    }
   })
 }
+
 function checkTable() {
   let humanWin = "111"
   let machineWin = "222"
@@ -35,7 +43,6 @@ function checkTable() {
     } else {
       console.log("ongoing game")
     }
-
     let column = ""
 
     for (let j = 0; j < table.length; j++) {
@@ -62,6 +69,8 @@ function checkTable() {
     alert("You lost!")
     return 2
   }
+
+  return 3
 }
 
 function resetTable() {
@@ -70,4 +79,33 @@ function resetTable() {
     [0,0,0],
     [0,0,0]
   ]
+}
+
+function updateUI(row, column, isHuman) {
+  let id = `${row}${column}`
+  let td = document.getElementById(id)
+  let image =  document.createElement("img")
+  let path = ""
+
+  if (isHuman === true) {
+    path = "./images/o.png"
+  } else {
+    path = "./images/x.png"
+  }
+
+  image.setAttribute("src", path)
+  td.appendChild(image)
+}
+
+function makeComputerMove() {
+  let row = Math.floor(Math.random(0,3) * 3)
+  let column = Math.floor(Math.random(0,3) * 3)
+
+  while (table[row][column] !== 0) {
+    row = Math.floor(Math.random(0,3) * 3)
+    column = Math.floor(Math.random(0,3) * 3)
+  }
+  
+  table[row][column] = 2
+  updateUI(row, column, false)
 }
