@@ -7,7 +7,6 @@ let allTds = document.querySelectorAll("td")
 for(let td of allTds) {
   //  console.log(td.id)
   td.addEventListener("click",function() {
-      console.log(td.id)
     let row = parseInt(td.id[0])
     let column = parseInt(td.id[1])
     table[row][column] = 1
@@ -16,61 +15,75 @@ for(let td of allTds) {
     let result = checkTable()
     if (result === 1 || result === 2) {
       resetTable()
+      alert(`You ${result === 1 ? "won!" : "lost!"}`)
+    } else if (result === 4) {
+      alert("Draw!")
+      resetTable()
     }
 
     makeComputerMove()
     result = checkTable()
     if (result === 1 || result === 2) {
       resetTable()
+      alert(`You ${result === 1 ? "won!" : "lost!"}`)
+    } else if (result === 4) {
+      alert("Draw!")
+      resetTable()
     }
+    console.log(result)
   })
 }
 
 function checkTable() {
   let humanWin = "111"
   let machineWin = "222"
+  let gameResult = undefined
   
   for (let i = 0; i < table.length; i++) {
     let row = table[i].join("")
     if (humanWin == row) {
-      console.log("you won" + row)
-      alert("You won!")
-      return 1
+      gameResult = 1
     } else if (machineWin == row) {
-      console.log("you lose" + row)
-      alert("You lost!")
-      return 2
-    } else {
-      console.log("ongoing game")
+      gameResult = 2
     }
+
     let column = ""
 
     for (let j = 0; j < table.length; j++) {
       column += table[j][i]
     }
+
     if (column === humanWin) {
-      console.log("You won")
-      alert("You won!")
-      return 1
+      gameResult = 1
     } else if (column === machineWin) {
-      console.log("You lost")
-      alert("You lost!")
-      return 2
+      gameResult = 2
     }
   }
   let diagonal1 = `${table[0][0]}${table[1][1]}${table[2][2]}`
   let diagonal2= `${table[0][2]}${table[1][1]}${table[2][0]}`
   if (diagonal1 === humanWin || diagonal2 === humanWin) {
-    console.log("You won")
-    alert("You won!")
-    return 1
+    gameResult = 1
   } else if (diagonal1 === machineWin || diagonal2 === machineWin) {
-    console.log("You lost")
-    alert("You lost!")
-    return 2
+    gameResult = 2
   }
 
-  return 3
+  let fullCells = 0 
+
+  for (let k = 0; k < table.length; k++) {
+    for (let l = 0; l < table.length; l++) {
+      if (table[k][l] !== 0) {
+       fullCells++
+      }
+    }
+  }
+
+  if (gameResult === undefined && fullCells === 9) {
+    gameResult = 4
+  } else if (gameResult !== 1 && gameResult !== 2){
+    gameResult = 3
+  }
+
+  return gameResult
 }
 
 function resetTable() {
@@ -94,7 +107,10 @@ function updateUI(row, column, isHuman) {
   }
 
   image.setAttribute("src", path)
-  td.appendChild(image)
+
+  if (td.hasChildNodes() === false) {
+    td.appendChild(image)
+  }
 }
 
 function makeComputerMove() {
