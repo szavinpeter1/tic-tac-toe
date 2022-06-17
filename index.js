@@ -5,10 +5,14 @@ let table = [
 ]
 let allTds = document.querySelectorAll("td")
 for(let td of allTds) {
-  //  console.log(td.id)
   td.addEventListener("click",function() {
     let row = parseInt(td.id[0])
     let column = parseInt(td.id[1])
+    let humanMove = canIMove(table, row, column)
+    if (humanMove === false) {
+      return 
+    }
+
     table[row][column] = 1
     updateUI(row, column, true)
     console.log(table)
@@ -30,6 +34,7 @@ for(let td of allTds) {
       alert("Draw!")
       resetTable()
     }
+
     console.log(result)
   })
 }
@@ -124,4 +129,27 @@ function makeComputerMove() {
   
   table[row][column] = 2
   updateUI(row, column, false)
+}
+
+function canIMove(table, row, col) {
+  let numberOfHumanMoves = 0
+  let numberOfComputerMoves = 0
+  let isCellFree = table[row][col] === 0;
+
+  for(let i = 0; i < table.length; i++) {
+      for(let j = 0; j < table.length; j++) {
+          if(table[i][j] === 1) {
+              numberOfHumanMoves++
+          } else if(table[i][j] === 2) {
+              numberOfComputerMoves++
+          }
+      }
+  }
+
+  
+  if(numberOfHumanMoves === numberOfComputerMoves && isCellFree) {
+      return true
+  } 
+
+  return false
 }
