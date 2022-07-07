@@ -9,7 +9,7 @@ for(let td of allTds) {
     let row = parseInt(td.id[0])
     let column = parseInt(td.id[1])
     let humanMove = canIMove(table, row, column)
-    if (humanMove === false) {
+    if (!humanMove) {
       return 
     }
 
@@ -42,7 +42,7 @@ for(let td of allTds) {
 function checkTable() {
   let humanWin = "111"
   let machineWin = "222"
-  let gameResult = undefined
+  let gameResult
   
   for (let i = 0; i < table.length; i++) {
     let row = table[i].join("")
@@ -82,7 +82,7 @@ function checkTable() {
     }
   }
 
-  if (gameResult === undefined && fullCells === 9) {
+  if (!gameResult && fullCells === 9) {
     gameResult = 4
   } else if (gameResult !== 1 && gameResult !== 2){
     gameResult = 3
@@ -105,7 +105,7 @@ function updateUI(row, column, isHuman) {
   let image =  document.createElement("img")
   let path = ""
 
-  if (isHuman === true) {
+  if (isHuman) {
     path = "./images/o.png"
   } else {
     path = "./images/x.png"
@@ -113,7 +113,7 @@ function updateUI(row, column, isHuman) {
 
   image.setAttribute("src", path)
 
-  if (td.hasChildNodes() === false) {
+  if (!td.hasChildNodes()) {
     td.appendChild(image)
   }
 }
